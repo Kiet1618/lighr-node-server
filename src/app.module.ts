@@ -5,9 +5,10 @@ import * as redisStore from "cache-manager-redis-store";
 
 import type { RedisClientOptions } from "redis";
 
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import configuration from "./config/configuration";
+import * as services from "./services";
+import * as controllers from "./controllers";
+
 
 import { KeyIndex, KeyIndexSchema } from "./schemas";
 
@@ -33,15 +34,14 @@ import { KeyIndex, KeyIndexSchema } from "./schemas";
         return {
           store: redisStore,
           url: redisUrl,
-          // ttl: 10,
-          // max: 100000,
           isGlobal: true,
         };
       },
       inject: [ConfigService],
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [].concat(Object.values(controllers)),
+  providers: [].concat(Object.values(services)),
+  exports: []
 })
 export class AppModule {}
