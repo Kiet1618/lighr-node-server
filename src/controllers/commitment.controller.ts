@@ -15,7 +15,10 @@ export class CommitmentController {
         if (existedCommitment) {
           throw new BadRequestException(COMMITMENT_EXISTED);  
         } 
-        
+        // Missing
+        // Signature message 
+        // const signature = sign(commitment);
+        // commitment.toString(), nodePubX, nodePubY
         return await this.commitmentService.create(createCommitmentDto);
     }
 }
