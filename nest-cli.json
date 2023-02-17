@@ -3,9 +3,12 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
+    "assets": ["**/*.proto"],
+    "watchAssets": true,
     "deleteOutDir": true,
     "webpack": true
   },
+  
   "projects": {
     "lecle": {
       "type": "library",

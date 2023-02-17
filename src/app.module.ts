@@ -2,22 +2,26 @@ import { CacheModule, Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
 import { HttpModule } from "@nestjs/axios";
+import type { RedisClientOptions } from "redis";
 import * as redisStore from "cache-manager-redis-store";
 
-import type { RedisClientOptions } from "redis";
 
-import configuration from "./config/configuration";
+import { LoadGrpcsModule } from "./grpc";
+
 import * as services from "./services";
 import * as controllers from "./controllers";
+import configuration from "./config/configuration";
+import { GoogleVerifier } from "./verifier/google.verifier";
 
 import { Commitment, CommitmentSchema, KeyIndex, KeyIndexSchema, Wallet, WalletSchema } from "./schemas";
-import { GoogleVerifier } from "./verifier/google.verifier";
+import { GRPCService } from "./grpc/grpc-service";
 
 @Module({
   imports: [
     HttpModule,
     ConfigModule.forRoot({
       load: [configuration],
+      envFilePath: `${process.cwd()}/src/config/node-info/${process.env.NODE_NAME}.env`,
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -45,9 +49,10 @@ import { GoogleVerifier } from "./verifier/google.verifier";
       },
       inject: [ConfigService],
     }),
+    LoadGrpcsModule.register(),
   ],
   controllers: [].concat(Object.values(controllers)),
-  providers: [].concat(Object.values(services), GoogleVerifier),
+  providers: [].concat(Object.values(services), GoogleVerifier, GRPCService),
   exports: [],
 })
 export class AppModule {}
