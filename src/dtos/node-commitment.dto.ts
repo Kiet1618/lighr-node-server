@@ -1,12 +1,12 @@
 export class NodeCommitmentDto {
-  commitment: string;
+  data: string;
 
   signature: string;
 
   pubNode: string;
 
-  constructor(commitment: string, signature: string, pubNode: string) {
-    this.commitment = commitment;
+  constructor(data: string, signature: string, pubNode: string) {
+    this.data = data;
     this.signature = signature;
     this.pubNode = pubNode;
   }
