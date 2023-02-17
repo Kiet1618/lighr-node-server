@@ -1,25 +1,22 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
-import { CreateWalletDto } from "src/dtos/create-wallet.dto";
+import { Body, Controller, Get, Post, UseGuards, UseInterceptors } from "@nestjs/common";
+import { LookupWalletDto } from "src/dtos/lookup-wallet.dto";
 import { Wallet } from "src/schemas";
 import { WalletService } from "src/services";
 import { VerifyGuard } from "src/verifier/verify.guard";
 
 @Controller("wallets")
 export class WalletController {
-    constructor(private readonly walletService: WalletService) {}
+  constructor(private readonly walletService: WalletService) {}
 
-    @Post()
-    async getWalletAddress(@Body() createWalletDto: CreateWalletDto): Promise<Wallet> {
-        let wallet = await this.walletService.findWallet(createWalletDto);
-        if (wallet) {
-          return wallet;  
-        } 
-        return await this.walletService.create(createWalletDto);
-    }
+  @Post()
+  async lookupWallet(@Body() lookupWalletDto: LookupWalletDto): Promise<any> {
+    const existedWallet = await this.walletService.findWallet(lookupWalletDto.owner);
+    return existedWallet ? existedWallet : await this.walletService.create(lookupWalletDto.owner);
+  }
 
-    @Get()
-    @UseGuards(VerifyGuard)
-    async findAll(): Promise<Wallet[]> {
-        return this.walletService.findAll()
-    }
+  @Get()
+  @UseGuards(VerifyGuard)
+  async findAll(): Promise<Wallet[]> {
+    return this.walletService.findAll();
+  }
 }

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument } from "mongoose";
+import { LookupWalletDto } from "src/dtos/lookup-wallet.dto";
 
 export type WalletDocument = HydratedDocument<Wallet>;
 
@@ -19,6 +20,7 @@ export class Wallet {
     this.publicKey = publicKey;
     this.address = address;
   }
+
 }
 
 export const WalletSchema = SchemaFactory.createForClass(Wallet);

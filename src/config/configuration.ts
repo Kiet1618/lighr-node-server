@@ -7,4 +7,5 @@ export default () => ({
     mongo_url: process.env.MONGO_URL,
   },
   redis_url: process.env.REDIS_URL,
+  private_key: process.env.PRIVATE_KEY,
 });
