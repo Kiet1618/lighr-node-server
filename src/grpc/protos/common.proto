@@ -1,0 +1,17 @@
+// hero/hero.proto
+syntax = "proto3";
+
+package p2p;
+
+service P2PService {
+  rpc broadcastAssignKey (BroadcastAssignKeyRequest) returns (BroadcastAssignKeyResponse) {}
+}
+
+message BroadcastAssignKeyRequest {
+  int32 id = 1;
+}
+
+message BroadcastAssignKeyResponse {
+  int32 id = 1;
+  string name = 2;
+}
