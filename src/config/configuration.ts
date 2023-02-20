@@ -3,6 +3,7 @@ dotenv.config();
 
 export default () => ({
   host: "127.0.0.1",
+  node_name: process.env.NODE_NAME,
   grpc_port:  parseInt(process.env.GRPC_PORT, 10) || 3000,
   port: parseInt(process.env.PORT, 10) || 3000,
   database: {

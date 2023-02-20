@@ -6,19 +6,23 @@ import { KeyIndexService } from "./../services";
 import { KeyAssignDto } from "./../dtos/key-index.dto";
 import { GRPCService } from "src/grpc/grpc-service";
 
+import { BroadcastAssignKeyRequest, BroadcastAssignKeyResponse } from "src/grpc/types";
+
 @Controller("/key-index")
 export class KeyIndexController {
   constructor(private keyIndexService: KeyIndexService, private grpcService: GRPCService) {}
 
   @GrpcMethod("P2PService", "broadcastAssignKey")
-  findOne(data) {
-    return data;
+  async broadcastAssignKey(data: BroadcastAssignKeyRequest): Promise<BroadcastAssignKeyResponse> {
+    return {
+      ...data,
+      name: ""
+    };
   }
 
   @Post()
-  async post(@Body() body: KeyAssignDto): Promise<KeyIndex> {
+  async post(@Body() body: KeyAssignDto): Promise<KeyIndex | any> {
     this.grpcService.broadcastAll();
-    const data = await this.keyIndexService.create({});
-    return data;
+
   }
 }

@@ -9,4 +9,7 @@ export type BroadcastAssignKeyRequest = {
   id: number
 };
 
-export type BroadcastAssignKeyResponse = {};
+export type BroadcastAssignKeyResponse = {
+  id: number;
+  name: string
+};
