@@ -4,7 +4,17 @@ syntax = "proto3";
 package p2p;
 
 service P2PService {
+  rpc checkWallet (CheckWalletRequest) returns (CheckWalletResponse) {}
   rpc broadcastAssignKey (BroadcastAssignKeyRequest) returns (BroadcastAssignKeyResponse) {}
+}
+
+message CheckWalletRequest {
+  string email = 1;
+}
+
+message CheckWalletResponse {
+  string publicKey = 1;
+  string address = 2;
 }
 
 message BroadcastAssignKeyRequest {

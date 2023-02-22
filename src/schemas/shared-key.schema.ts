@@ -9,7 +9,7 @@ export class SharedKey {
   @Prop()
   secret: BN;
 
-  @Prop({ type: Types.ObjectId, ref: "Wallet" })
+  @Prop({ type: Types.ObjectId, ref: "Wallet", unique: true })
   walletId: string;
 
   @Prop()
