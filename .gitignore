@@ -36,5 +36,5 @@ lerna-debug.log*
 
 
 # Custom
-.env
-src/config/node-info/*.env
+# .env
+# src/config/node-info/*.env
