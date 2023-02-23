@@ -118,8 +118,10 @@ export class GRPCService implements OnModuleInit {
 
   async generateShares(owner: string): Promise<boolean> {
     const nodes = Object.keys(P2PList).map((node) => this[node] as P2PService);
-    console.log(this.sharedKeyService)
+    console.log(this.sharedKeyService);
     const sharedKey = await this.sharedKeyService.findSharedKeyByOwner(owner);
+    console.log("🚀 ~ file: grpc-service.ts:123 ~ GRPCService ~ generateShares ~ sharedKey:", sharedKey)
+    
     const secret = sharedKey.secret;
     const shares: BN[] = [new BN(secret, "hex")];
 

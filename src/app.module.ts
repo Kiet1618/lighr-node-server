@@ -61,6 +61,6 @@ import { SharedKey, SharedKeySchema } from "./schemas/shared-key.schema";
   ],
   controllers: [].concat(Object.values(controllers)),
   
-  providers: [].concat(Object, Object.values(services), GRPCService, GoogleVerifier),
+  providers: [].concat(Object, GRPCService, Object.values(services), GoogleVerifier),
 })
 export class AppModule {}
