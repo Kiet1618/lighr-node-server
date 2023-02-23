@@ -103,7 +103,7 @@ export class GRPCService implements OnModuleInit {
       });
     });
 
-    /////
+    // Get temporarily private instead of public
     const masterPrivateKey = groupPublicKeys.reduce((pre, current) => {
       const prevFormat = new BN(pre, "hex");
       const currentFormat = new BN(current, "hex");
@@ -118,7 +118,7 @@ export class GRPCService implements OnModuleInit {
 
   async generateShares(owner: string): Promise<boolean> {
     const nodes = Object.keys(P2PList).map((node) => this[node] as P2PService);
-    
+    console.log(this.sharedKeyService)
     const sharedKey = await this.sharedKeyService.findSharedKeyByOwner(owner);
     const secret = sharedKey.secret;
     const shares: BN[] = [new BN(secret, "hex")];
@@ -140,7 +140,7 @@ export class GRPCService implements OnModuleInit {
         await lastValueFrom(nodes[nodeIndex].addReceivedShare({ owner, receivedShare }));
       }
     }
-    
+
     return true;
   }
 }

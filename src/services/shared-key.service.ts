@@ -26,7 +26,7 @@ export class SharedKeyService {
   }
 
   async findSharedKeyByOwner(owner: string): Promise<SharedKey> {
-    return await this.sharedKeyModel.findOne({ owner });
+    return this.sharedKeyModel.findOne({ owner });
   }
 
   // async generateShares(owner: string): Promise<boolean> {

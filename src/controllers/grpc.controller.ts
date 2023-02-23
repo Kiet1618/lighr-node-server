@@ -46,7 +46,7 @@ export class RGPCController {
       return { status };
     } catch (error) {
       console.log(error.message);
-      throw new InternalServerErrorException("Error when initSecret");
+      throw new InternalServerErrorException("Error when generateShares");
     }
   }
 
@@ -62,6 +62,11 @@ export class RGPCController {
     const status = await this.sharedKeyService.deriveSecretSharedKey(data.owner);
     return { status };
   }
+
+  // @GrpcMethod("P2PService", "getReceivedShares") 
+  // async getReceiveShares(data: GetReceivedSharesRequest): Promise<GetReceivedSharesResponse> {
+  //   return ;
+  // }
 
   @Post()
   async post(@Body() body: KeyAssignDto): Promise<KeyIndex | any> {
