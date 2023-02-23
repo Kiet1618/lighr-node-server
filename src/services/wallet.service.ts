@@ -8,7 +8,6 @@ import { Wallet, WalletDocument } from "src/schemas";
 export class WalletService {
   constructor(
     @InjectModel(Wallet.name) private walletModel: Model<WalletDocument>,
-    private grpcService: GRPCService,
   ) {}
 
   // async create(createWalletDto: CreateWalletDto): Promise<Wallet> {
@@ -24,8 +23,7 @@ export class WalletService {
     return this.walletModel.findOne({ owner }).exec();
   }
 
-  async create(owner: string): Promise<Wallet> {
-    const { publicKey, address } = await this.grpcService.generateSharedSecret(owner);
+  async create(owner: string, publicKey: string, address: string): Promise<Wallet> {
     let newWallet = new Wallet(owner, publicKey, address);
     // return await this.walletModel.create(newWallet);
     return newWallet;
