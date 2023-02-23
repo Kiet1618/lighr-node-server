@@ -12,7 +12,7 @@
     "start:dev:node1": "export NODE_NAME=node1 && nest start --watch",
     "start:dev:node2": "export NODE_NAME=node2 && nest start --watch",
     "start:dev:node3": "export NODE_NAME=node3 && nest start --watch",
-    "start:dev:3node": "yarn run start:dev:node1 || start:dev:node2 || start:dev:node3",
+    "start:dev:3node": "yarn run start:dev:node1 & yarn run start:dev:node2 & yarn run start:dev:node3",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

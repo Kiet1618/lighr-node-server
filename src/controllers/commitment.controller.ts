@@ -1,11 +1,11 @@
 import * as eccrypto from "eccrypto";
-import { ec } from "elliptic";
 import { BadRequestException, Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { COMMITMENT_EXISTED } from "src/common/message";
 import { CreateCommitmentDto } from "src/dtos/create-commitment.dto";
 import { CommitmentService } from "src/services";
 import { NodeCommitmentDto } from "src/dtos/node-commitment.dto";
+import { secp256k1 } from "src/common/secp256k1";
 
 @Controller("commitments")
 export class CommitmentController {
@@ -25,7 +25,6 @@ export class CommitmentController {
       throw new BadRequestException(COMMITMENT_EXISTED);
     }
 
-    const secp256k1 = new ec("secp256k1");
     const privateKey = this.configService.get("private_key") as string;
     const keyPair = secp256k1.keyFromPrivate(privateKey);
     const publicKey = keyPair.getPublic("hex");

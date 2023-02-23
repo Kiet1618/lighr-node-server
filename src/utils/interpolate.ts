@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { nSecp256k1 } from "src/common/secp256k1";
+import { nSecp256k1 } from "../common/secp256k1";
 
 export function interpolate(
   shares: BN[],

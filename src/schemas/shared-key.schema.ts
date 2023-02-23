@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import BN from "bn.js";
 import { HydratedDocument, Types } from "mongoose";
 
 export type SharedKeyDocument = HydratedDocument<SharedKey>;
@@ -7,16 +6,19 @@ export type SharedKeyDocument = HydratedDocument<SharedKey>;
 @Schema({ timestamps: true })
 export class SharedKey {
   @Prop()
-  secret: BN;
+  secret: string;
 
-  @Prop({ type: Types.ObjectId, ref: "Wallet", unique: true })
+  @Prop({ type: Types.ObjectId, ref: "Wallet" })
   walletId: string;
 
   @Prop()
-  receivedShares: [BN];
+  owner: string;
 
   @Prop()
-  sharedSecret: BN;
+  receivedShares: [string];
+
+  @Prop()
+  sharedSecret: string;
 }
 
 export const SharedKeySchema = SchemaFactory.createForClass(SharedKey);

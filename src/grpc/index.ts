@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 
 import P2PList from "../config/node-info/p2p-list";
+
 const clients: any[] = Object.keys(P2PList).map((elm) => {
   return {
     name: `P2P_${elm.toUpperCase()}`,

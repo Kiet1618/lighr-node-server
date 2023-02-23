@@ -5,7 +5,6 @@ import { HttpModule } from "@nestjs/axios";
 import type { RedisClientOptions } from "redis";
 import * as redisStore from "cache-manager-redis-store";
 
-
 import { LoadGrpcsModule } from "./grpc";
 
 import * as services from "./services";
@@ -13,8 +12,16 @@ import * as controllers from "./controllers";
 import configuration from "./config/configuration";
 import { GoogleVerifier } from "./verifier/google.verifier";
 
-import { Commitment, CommitmentSchema, KeyIndex, KeyIndexSchema, Wallet, WalletSchema } from "./schemas";
+import {
+  Commitment,
+  CommitmentSchema,
+  KeyIndex,
+  KeyIndexSchema,
+  Wallet,
+  WalletSchema,
+} from "./schemas";
 import { GRPCService } from "./grpc/grpc-service";
+import { SharedKey, SharedKeySchema } from "./schemas/shared-key.schema";
 
 @Module({
   imports: [
@@ -36,6 +43,7 @@ import { GRPCService } from "./grpc/grpc-service";
       { name: KeyIndex.name, schema: KeyIndexSchema },
       { name: Wallet.name, schema: WalletSchema },
       { name: Commitment.name, schema: CommitmentSchema },
+      { name: SharedKey.name, schema: SharedKeySchema },
     ]),
     CacheModule.registerAsync<RedisClientOptions>({
       imports: [ConfigModule],
@@ -53,6 +61,5 @@ import { GRPCService } from "./grpc/grpc-service";
   ],
   controllers: [].concat(Object.values(controllers)),
   providers: [].concat(Object.values(services), GoogleVerifier, GRPCService),
-  exports: [],
 })
 export class AppModule {}

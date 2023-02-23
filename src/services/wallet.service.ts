@@ -25,9 +25,9 @@ export class WalletService {
   }
 
   async create(owner: string): Promise<Wallet> {
-    // TO DO: Initialize key sharing
-    this.grpcService.generateSecret();
-    let newWallet = new Wallet(owner, "0xPub", "0xAddr");
-    return await this.walletModel.create(newWallet);
+    const { publicKey, address } = await this.grpcService.generateSharedSecret(owner);
+    let newWallet = new Wallet(owner, publicKey, address);
+    // return await this.walletModel.create(newWallet);
+    return newWallet;
   }
 }
