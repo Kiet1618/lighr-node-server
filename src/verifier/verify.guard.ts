@@ -9,12 +9,12 @@ export class VerifyGuard implements CanActivate {
   
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const { verifier, idToken, email } = request.body;
+    const { verifier, idToken, owner } = request.body;
 
     if (verifier !== "google") {
       throw new BadRequestException(NOT_SUPPORT);
     }
 
-    return this.googleVerifier.verify(idToken, email);
+    return this.googleVerifier.verify(idToken, owner);
   }
 }
