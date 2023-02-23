@@ -5,7 +5,7 @@ import { P2PService } from "./types";
 import { lastValueFrom } from "rxjs";
 import { SharedKeyService } from "src/services";
 import P2PList from "src/config/node-info/p2p-list";
-import BN from "bn.js";
+import * as BN from "bn.js";
 import { Wallet } from "src/schemas";
 import { getAddress } from "src/utils/wallet";
 import { nSecp256k1, secp256k1 } from "src/common/secp256k1";
@@ -49,59 +49,38 @@ export class GRPCService implements OnModuleInit {
     const groupPublicKeys: string[] = [];
 
     // step 1: init secret
-    await new Promise((resolve, _reject) => {
-      let count = 0;
-      nodeNames.forEach(async (nodeName) => {
-        const p2p = this[nodeName] as P2PService;
-        try {
-          const { publicKey } = await lastValueFrom(p2p.initSecret({ owner }));
-          groupPublicKeys.push(publicKey);
-          count++;
-          if (count == nodeNames.length) {
-            resolve(true);
-          }
-        } catch (error) {
-          console.log(error.message);
-          throw new InternalServerErrorException(`Error when initSecret in ${nodeName}`);
-        }
-      });
-    });
+    for (const nodeName of nodeNames) {
+      const p2p = this[nodeName] as P2PService;
+      try {
+        const { publicKey } = await lastValueFrom(p2p.initSecret({ owner }));
+        groupPublicKeys.push(publicKey);
+      } catch (error) {
+        console.error(error.message);
+        throw new InternalServerErrorException(`Error when initSecret in ${nodeName}`);
+      }
+    }
 
     // step 2: get shares
-    await new Promise((resolve, _reject) => {
-      let count = 0;
-      nodeNames.forEach(async (nodeName) => {
-        const p2p = this[nodeName] as P2PService;
-        try {
-          await lastValueFrom(p2p.generateShares({ owner }));
-          count++;
-          if (count == nodeNames.length) {
-            resolve(true);
-          }
-        } catch (error) {
-          console.log(error.message);
-          throw new InternalServerErrorException(`Error when initSecret in ${nodeName}`);
-        }
-      });
-    });
+    for (const nodeName of nodeNames) {
+      const p2p = this[nodeName] as P2PService;
+      try {
+        await lastValueFrom(p2p.generateShares({ owner }));
+      } catch (error) {
+        console.error(error.message);
+        throw new InternalServerErrorException(`Error when generateShares in ${nodeName}`);
+      }
+    }
 
     // step 3: derive shared secret key
-    await new Promise((resolve, _reject) => {
-      let count = 0;
-      nodeNames.forEach(async (nodeName) => {
-        const p2p = this[nodeName] as P2PService;
-        try {
-          await lastValueFrom(p2p.deriveSharedSecret({ owner }));
-          count++;
-          if (count == nodeNames.length) {
-            resolve(true);
-          }
-        } catch (error) {
-          console.log(error.message);
-          throw new InternalServerErrorException(`Error when initSecret in ${nodeName}`);
-        }
-      });
-    });
+    for (const nodeName of nodeNames) {
+      const p2p = this[nodeName] as P2PService;
+      try {
+        await lastValueFrom(p2p.deriveSharedSecret({ owner }));
+      } catch (error) {
+        console.error(error.message);
+        throw new InternalServerErrorException(`Error when deriveSharedSecret in ${nodeName}`);
+      }
+    }
 
     // Get temporarily private instead of public
     const masterPrivateKey = groupPublicKeys.reduce((pre, current) => {
@@ -113,17 +92,26 @@ export class GRPCService implements OnModuleInit {
     const masterPublicKey = secp256k1.keyFromPrivate(masterPrivateKey!, "hex").getPublic("hex");
     const address = getAddress(masterPublicKey);
 
-    return { address, owner, publicKey: "masterPublicKey" };
+    // step 4: store wallet info
+    for (const nodeName of nodeNames) {
+      const p2p = this[nodeName] as P2PService;
+      try {
+        await lastValueFrom(p2p.storeWalletInfo({ address, owner, publicKey: masterPublicKey }));
+      } catch (error) {
+        console.error(error.message);
+        throw new InternalServerErrorException(`Error when deriveSharedSecret in ${nodeName}`);
+      }
+    }
+
+    return { address, owner, publicKey: masterPublicKey };
   }
 
   async generateShares(owner: string): Promise<boolean> {
     const nodes = Object.keys(P2PList).map((node) => this[node] as P2PService);
-    console.log(this.sharedKeyService);
+
     const sharedKey = await this.sharedKeyService.findSharedKeyByOwner(owner);
-    console.log("🚀 ~ file: grpc-service.ts:123 ~ GRPCService ~ generateShares ~ sharedKey:", sharedKey)
-    
     const secret = sharedKey.secret;
-    const shares: BN[] = [new BN(secret, "hex")];
+    const shares = [new BN(secret, "hex")];
 
     const indices: number[] = [0];
 
@@ -138,7 +126,7 @@ export class GRPCService implements OnModuleInit {
         indices.push(nodeIndex + 1);
       } else {
         let point = interpolate(shares, indices, nodeIndex + 1);
-        let receivedShare = `0x${point.toString("hex")}`;
+        let receivedShare = point.toString("hex");
         await lastValueFrom(nodes[nodeIndex].addReceivedShare({ owner, receivedShare }));
       }
     }

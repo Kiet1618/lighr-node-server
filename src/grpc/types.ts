@@ -8,6 +8,7 @@ export interface P2PService {
   addReceivedShare(input: AddReceivedShareRequest): Observable<AddReceivedShareResponse>;
   generateShares(input: GenerateSharesRequest): Observable<GenerateSharesResponse>;
   deriveSharedSecret(input: DeriveSharedSecretRequest): Observable<DeriveSharedSecretResponse>;
+  storeWalletInfo(input: StoreWalletInfoRequest): Observable<StoreWalletInfoResponse>;
 }
 
 export type BroadcastAssignKeyRequest = {
@@ -56,3 +57,13 @@ export type DeriveSharedSecretRequest = {
 export type DeriveSharedSecretResponse = {
   status: boolean;
 };
+
+export type StoreWalletInfoRequest = {
+  owner: string;
+  publicKey: string;
+  address: string;
+};
+
+export type StoreWalletInfoResponse = {
+  status: boolean;
+}

@@ -1,14 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { GRPCService } from "src/grpc/grpc-service";
 import { Wallet, WalletDocument } from "src/schemas";
 
 @Injectable()
 export class WalletService {
-  constructor(
-    @InjectModel(Wallet.name) private walletModel: Model<WalletDocument>,
-  ) {}
+  constructor(@InjectModel(Wallet.name) private walletModel: Model<WalletDocument>) {}
 
   // async create(createWalletDto: CreateWalletDto): Promise<Wallet> {
   //   const createdWallet = new this.walletModel(createWalletDto);
@@ -23,9 +20,12 @@ export class WalletService {
     return this.walletModel.findOne({ owner }).exec();
   }
 
-  async create(owner: string, publicKey: string, address: string): Promise<Wallet> {
+  async createWallet(owner: string, publicKey: string, address: string): Promise<Wallet> {
     let newWallet = new Wallet(owner, publicKey, address);
-    // return await this.walletModel.create(newWallet);
-    return newWallet;
+    return this.walletModel.create(newWallet);
+  }
+
+  async dropAllWalletsByOwner(owner: string): Promise<any> {
+    return this.walletModel.deleteMany({ owner });
   }
 }

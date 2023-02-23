@@ -7,15 +7,19 @@ import { VerifyGuard } from "src/verifier/verify.guard";
 
 @Controller("wallets")
 export class WalletController {
-  constructor(private readonly walletService: WalletService, private grpcService: GRPCService) { }
+  constructor(private readonly walletService: WalletService, private grpcService: GRPCService) {}
 
   @Post()
   async lookupWallet(@Body() lookupWalletDto: LookupWalletDto): Promise<any> {
     const existedWallet = await this.walletService.findWallet(lookupWalletDto.owner);
-    if (existedWallet) return existedWallet;
-    const { publicKey, address } = await this.grpcService.generateSharedSecret(lookupWalletDto.owner);
+    if (existedWallet) {
+      return existedWallet;
+    }
 
-    return this.walletService.create(lookupWalletDto.owner, publicKey, address);
+    const { publicKey, address } = await this.grpcService.generateSharedSecret(
+      lookupWalletDto.owner,
+    );
+    return this.walletService.createWallet(lookupWalletDto.owner, publicKey, address);
   }
 
   @Get()

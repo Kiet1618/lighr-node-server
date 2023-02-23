@@ -1,15 +1,7 @@
 import { GrpcMethod } from "@nestjs/microservices";
-import {
-  BadGatewayException,
-  Body,
-  Controller,
-  InternalServerErrorException,
-  Post,
-} from "@nestjs/common";
+import { Controller, InternalServerErrorException } from "@nestjs/common";
 
-import { KeyIndex } from "./../schemas";
-import { SharedKeyService } from "./../services";
-import { KeyAssignDto } from "./../dtos/key-index.dto";
+import { SharedKeyService, WalletService } from "./../services";
 import { GRPCService } from "src/grpc/grpc-service";
 import {
   AddReceivedShareRequest,
@@ -20,11 +12,17 @@ import {
   GenerateSharesResponse,
   InitSecretRequest,
   InitSecretResponse,
+  StoreWalletInfoRequest,
+  StoreWalletInfoResponse,
 } from "src/grpc/types";
 
 @Controller("/grpc")
 export class RGPCController {
-  constructor(private sharedKeyService: SharedKeyService, private grpcService: GRPCService) {}
+  constructor(
+    private grpcService: GRPCService,
+    private sharedKeyService: SharedKeyService,
+    private walletService: WalletService,
+  ) {}
 
   @GrpcMethod("P2PService", "initSecret")
   async initSecret(data: InitSecretRequest): Promise<InitSecretResponse> {
@@ -34,7 +32,7 @@ export class RGPCController {
         publicKey,
       };
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       throw new InternalServerErrorException("Error when initSecret");
     }
   }
@@ -42,17 +40,16 @@ export class RGPCController {
   @GrpcMethod("P2PService", "generateShares")
   async generateShares(data: GenerateSharesRequest): Promise<GenerateSharesResponse> {
     try {
-      const status = await this.grpcService.generateShares(data.owner)
+      const status = await this.grpcService.generateShares(data.owner);
       return { status };
     } catch (error) {
-      console.log(error.message);
-      throw new InternalServerErrorException("Error when generateShares");
+      console.error(error.message);
+      throw new InternalServerErrorException("Error when generateShares Controller");
     }
   }
 
   @GrpcMethod("P2PService", "addReceivedShare")
   async addReceivedShare(data: AddReceivedShareRequest): Promise<AddReceivedShareResponse> {
-    console.log('added')
     const status = await this.sharedKeyService.updateReceivedShare(data.owner, data.receivedShare);
     return { status };
   }
@@ -63,13 +60,10 @@ export class RGPCController {
     return { status };
   }
 
-  // @GrpcMethod("P2PService", "getReceivedShares") 
-  // async getReceiveShares(data: GetReceivedSharesRequest): Promise<GetReceivedSharesResponse> {
-  //   return ;
-  // }
-
-  @Post()
-  async post(@Body() body: KeyAssignDto): Promise<KeyIndex | any> {
-    this.grpcService.broadcastAll();
+  @GrpcMethod("P2PService", "storeWalletInfo")
+  async storeWalletInfo(data: StoreWalletInfoRequest): Promise<StoreWalletInfoResponse> {
+    await this.walletService.createWallet(data.owner, data.publicKey, data.address);
+    // await this.sharedKeyService.addWalletIdRef(data.owner, newWallet._id);
+    return { status: true };
   }
 }

@@ -1,11 +1,7 @@
-import BN from "bn.js";
+import * as BN from "bn.js";
 import { nSecp256k1 } from "../common/secp256k1";
 
-export function interpolate(
-  shares: BN[],
-  nodeIndices: number[],
-  xPoint: number
-): BN | null {
+export function interpolate(shares: BN[], nodeIndices: number[], xPoint: number): BN | null {
   let result = new BN(0);
   if (shares.length !== nodeIndices.length) {
     return null;
@@ -31,8 +27,8 @@ export function interpolate(
       }
     }
 
-    let delta = upper.mul(lower.invm(nSecp256k1)).umod(nSecp256k1);;
-    delta = delta.mul(shares[i]).umod(nSecp256k1); 
+    let delta = upper.mul(lower.invm(nSecp256k1)).umod(nSecp256k1);
+    delta = delta.mul(shares[i]).umod(nSecp256k1);
     result = result.add(delta).umod(nSecp256k1);
   }
 

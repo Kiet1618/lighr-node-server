@@ -10,6 +10,7 @@ service P2PService {
   rpc generateShares(GenerateSharesRequest) returns (GenerateSharesResponse) {}
   rpc addReceivedShare(AddReceivedShareRequest) returns (AddReceivedShareResponse) {}
   rpc deriveSharedSecret(DeriveSharedSecretRequest) returns (DeriveSharedSecretResponse) {}
+  rpc storeWalletInfo(StoreWalletInfoRequest) returns (StoreWalletInfoResponse) {}
 }
 
 message CheckWalletRequest {
@@ -60,5 +61,15 @@ message DeriveSharedSecretRequest {
 }
 
 message DeriveSharedSecretResponse {
+  bool status = 1;
+}
+
+message StoreWalletInfoRequest {
+  string owner = 1;
+  string publicKey = 2;
+  string address = 3;
+}
+
+message StoreWalletInfoResponse {
   bool status = 1;
 }

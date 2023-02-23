@@ -1,4 +1,5 @@
-import keccak from "keccak";
+// import { Keccak } from "keccak";
+const keccak = require("keccak");
 
 export function getAddress(publicKey: string): string {
   const formatedPublicKey = publicKey.slice(2);
