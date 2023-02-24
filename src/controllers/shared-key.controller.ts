@@ -2,7 +2,7 @@ import { BadRequestException, Body, Controller, Post, UseGuards } from "@nestjs/
 import { ConfigService } from "@nestjs/config";
 import { secp256k1 } from "src/common/secp256k1";
 import { LookupSharedSecretDto } from "src/dtos/lookup-shared-secret.dto";
-import { CommitmentService, SharedKeyService } from "src/services";
+import { CommitmentService, SharedKeyService, WalletService } from "src/services";
 import * as eccrypto from "eccrypto";
 import { VerifyGuard } from "src/verifier/verify.guard";
 import { NodeSharedSecretDto } from "src/dtos/node-shared-secret.dto";
@@ -13,6 +13,7 @@ export class SharedKeyController {
   constructor(
     private readonly sharedKeyService: SharedKeyService,
     private readonly commitmentService: CommitmentService,
+    private readonly walletService: WalletService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -26,7 +27,11 @@ export class SharedKeyController {
     const hashIdToken = keccak("keccak256").update(idToken).digest().toString("hex");
     const existedCommitment = await this.commitmentService.findCommitment(hashIdToken);
     if (!existedCommitment) {
-      throw new BadRequestException("Commitment of Id Token doesn't exist ");
+      throw new BadRequestException("Commitment of Id Token doesn't exist.");
+    }
+    const wallet = await this.walletService.findWallet(owner);
+    if (!wallet) {
+      throw new BadRequestException("Wallet have not init yet.");
     }
 
     const nodePrivateKey = this.configService.get("private_key") as string;
@@ -46,7 +51,7 @@ export class SharedKeyController {
     );
 
     return {
-      publicKey: pubNode,
+      publicKey: wallet.publicKey,
       threshold: 1,
       metadata: {
         ciphertext: ciphertext.toString("hex"),

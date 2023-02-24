@@ -10,8 +10,7 @@ import { Wallet } from "src/schemas";
 import { getAddress } from "src/utils/wallet";
 import { nSecp256k1, secp256k1 } from "src/common/secp256k1";
 import { interpolate } from "src/utils/interpolate";
-
-const THRESHOLD = 3;
+import { THRESHOLD } from "src/common/nodes";
 
 @Injectable()
 export class GRPCService implements OnModuleInit {
