@@ -6,7 +6,7 @@ import { CommitmentService, SharedKeyService, WalletService } from "src/services
 import * as eccrypto from "eccrypto";
 import { VerifyGuard } from "src/verifier/verify.guard";
 import { NodeSharedSecretDto } from "src/dtos/node-shared-secret.dto";
-import { keccak } from "src/utils/wallet";
+import { createKeccak256 } from "src/utils/wallet";
 
 @Controller("shared-keys")
 export class SharedKeyController {
@@ -24,7 +24,7 @@ export class SharedKeyController {
   ): Promise<NodeSharedSecretDto> {
     const { idToken, tempPub, nodeSignatures, owner } = lookupSharedSecretDto;
 
-    const hashIdToken = keccak("keccak256").update(idToken).digest().toString("hex");
+    const hashIdToken = createKeccak256(idToken);
     const existedCommitment = await this.commitmentService.findCommitment(hashIdToken);
     if (!existedCommitment) {
       throw new BadRequestException("Commitment of Id Token doesn't exist.");
@@ -53,8 +53,8 @@ export class SharedKeyController {
     return {
       publicKey: wallet.publicKey,
       threshold: 1,
+      share: ciphertext.toString("hex"),
       metadata: {
-        ciphertext: ciphertext.toString("hex"),
         mac: mac.toString("hex"),
         iv: iv.toString("hex"),
         ephemPublicKey: ephemPublicKey.toString("hex"),

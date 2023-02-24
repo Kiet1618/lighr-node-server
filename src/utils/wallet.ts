@@ -1,14 +1,14 @@
-// import { Keccak } from "keccak";
-export const keccak = require("keccak");
+// import keccak from "keccak";
+const keccak = require("keccak");
 
 export function getAddress(publicKey: string): string {
   const formatedPublicKey = publicKey.slice(2);
   const publicKeyBytes = Buffer.from(formatedPublicKey, "hex");
 
-  const hash = keccak("keccak256").update(publicKeyBytes).digest("hex");
+  const hash = createKeccak256(publicKeyBytes);
   const address = hash.slice(-40);
 
-  const hashAddress = keccak("keccak256").update(address).digest("hex");
+  const hashAddress = createKeccak256(address).slice(2);
 
   let checksumAddress = "0x";
 
@@ -21,4 +21,9 @@ export function getAddress(publicKey: string): string {
   }
 
   return checksumAddress;
+}
+
+export function createKeccak256(data: string | Buffer): string {
+  const hash = keccak("keccak256").update(data).digest("hex");
+  return `0x${hash}`;
 }
