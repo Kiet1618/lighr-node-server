@@ -19,6 +19,8 @@ import {
   KeyIndexSchema,
   Wallet,
   WalletSchema,
+  Storage,
+  StorageSchema,
 } from "./schemas";
 import { GRPCService } from "./grpc/grpc-service";
 import { SharedKey, SharedKeySchema } from "./schemas/shared-key.schema";
@@ -44,6 +46,7 @@ import { SharedKey, SharedKeySchema } from "./schemas/shared-key.schema";
       { name: Wallet.name, schema: WalletSchema },
       { name: Commitment.name, schema: CommitmentSchema },
       { name: SharedKey.name, schema: SharedKeySchema },
+      { name: Storage.name, schema: StorageSchema },
     ]),
     CacheModule.registerAsync<RedisClientOptions>({
       imports: [ConfigModule],
@@ -60,7 +63,7 @@ import { SharedKey, SharedKeySchema } from "./schemas/shared-key.schema";
     LoadGrpcsModule.register(),
   ],
   controllers: [].concat(Object.values(controllers)),
-  
+
   providers: [].concat(Object, GRPCService, Object.values(services), GoogleVerifier),
 })
 export class AppModule {}
