@@ -23,6 +23,14 @@ export class CreateStorageDto {
   @IsNotEmpty()
   readonly owner: string;
 
+  @IsString()
+  @IsNotEmpty()
+  readonly publicKey: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly signature: string;
+
   @IsObject()
   @ValidateNested()
   @IsNotEmptyObject()

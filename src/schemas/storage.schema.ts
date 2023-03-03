@@ -15,6 +15,9 @@ export class Storage {
   @Prop({ required: true, unique: true })
   owner: string;
 
+  @Prop({ required: true, unique: true })
+  publicKey: string;
+
   @Prop({ required: true, type: Metadata })
   metadata: Metadata;
 }

@@ -33,6 +33,10 @@ export class UpdateStorageDto {
   @IsNotEmpty()
   readonly owner: string;
 
+  @IsString()
+  @IsNotEmpty()
+  readonly signature: string;
+
   @IsObject()
   @ValidateNested()
   @IsNotEmptyObject()
