@@ -32,11 +32,11 @@ export class StorageController {
     if (existedMetadata) {
       throw new BadRequestException("Metadata already exists");
     }
-    return this.storageService.createMetadata(storage.owner, storage.metadata);
+    return this.storageService.createMetadata(storage.owner, storage.encryptedMetadata);
   }
 
   @Put()
   async updateMetadata(@Body() newStorage: UpdateStorageDto): Promise<any> {
-    return this.storageService.updateMetadata(newStorage.owner, newStorage.metadata);
+    return this.storageService.updateMetadata(newStorage.owner, newStorage.encryptedMetadata);
   }
 }
