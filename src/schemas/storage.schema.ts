@@ -19,7 +19,7 @@ export class Storage {
   publicKey: string;
 
   @Prop({ required: true, type: EncryptedMetadata })
-  metadata: EncryptedMetadata;
+  encryptedMetadata: EncryptedMetadata;
 }
 
 export const StorageSchema = SchemaFactory.createForClass(Storage);

@@ -38,13 +38,13 @@ export class StorageController {
     const validSig = this.verifySignature(
       createStorage.encryptedMetadata,
       createStorage.signature,
-      existedMetadata.publicKey,
+      createStorage.publicKey,
     );
     if (!validSig) {
       throw new BadRequestException("Signature is not valid");
     }
 
-    return this.storageService.createMetadata(createStorage.owner, createStorage.encryptedMetadata);
+    return this.storageService.createMetadata(createStorage);
   }
 
   @Put()

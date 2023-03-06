@@ -14,8 +14,8 @@ export class StorageService {
     return this.storageModel.findOne({ owner });
   }
 
-  async createMetadata(owner: string, encryptedMetadata: EncryptedMetadata): Promise<Storage> {
-    return this.storageModel.create({ owner, encryptedMetadata });
+  async createMetadata(storage: Storage): Promise<Storage> {
+    return this.storageModel.create(storage);
   }
 
   async updateMetadata(owner: string, encryptedMetadata: EncryptedMetadata) {
