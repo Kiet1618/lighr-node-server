@@ -21,9 +21,10 @@ import {
   WalletSchema,
   Storage,
   StorageSchema,
+  SharedKey,
+  SharedKeySchema,
 } from "./schemas";
 import { GRPCService } from "./grpc/grpc-service";
-import { SharedKey, SharedKeySchema } from "./schemas/shared-key.schema";
 
 @Module({
   imports: [
