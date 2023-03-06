@@ -22,7 +22,7 @@ export class StorageController {
   @Get(":owner")
   async getMetadata(@Param("owner") owner: string): Promise<Storage> {
     const metadata = await this.storageService.findMetadataByOwner(owner);
-    if (metadata) {
+    if (!metadata) {
       throw new NotFoundException(`Can not find metadata with ${owner}`);
     }
     return metadata;
