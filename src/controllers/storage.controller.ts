@@ -13,7 +13,7 @@ import { CreateStorageDto } from "src/dtos/create-storage.dto";
 import { UpdateStorageDto } from "src/dtos/update-storage.dto";
 import { StorageService } from "src/services";
 import { createKeccak256 } from "src/utils/wallet";
-import { Metadata, Storage } from "src/schemas";
+import { EncryptedMetadata, Storage } from "src/schemas";
 
 @Controller("storages")
 export class StorageController {
@@ -36,7 +36,7 @@ export class StorageController {
     }
 
     const validSig = this.verifySignature(
-      createStorage.metadata,
+      createStorage.encryptedMetadata,
       createStorage.signature,
       existedMetadata.publicKey,
     );
@@ -44,7 +44,7 @@ export class StorageController {
       throw new BadRequestException("Signature is not valid");
     }
 
-    return this.storageService.createMetadata(createStorage.owner, createStorage.metadata);
+    return this.storageService.createMetadata(createStorage.owner, createStorage.encryptedMetadata);
   }
 
   @Put()
@@ -55,7 +55,7 @@ export class StorageController {
     }
 
     const validSig = this.verifySignature(
-      updateStorage.metadata,
+      updateStorage.encryptedMetadata,
       updateStorage.signature,
       existedMetadata.publicKey,
     );
@@ -63,10 +63,10 @@ export class StorageController {
       throw new BadRequestException("Signature is not valid");
     }
 
-    return this.storageService.updateMetadata(updateStorage.owner, updateStorage.metadata);
+    return this.storageService.updateMetadata(updateStorage.owner, updateStorage.encryptedMetadata);
   }
 
-  verifySignature(metadata: Metadata, signature: string, publicKey: string): boolean {
+  verifySignature(metadata: EncryptedMetadata, signature: string, publicKey: string): boolean {
     const msg = createKeccak256(JSON.stringify(metadata));
     return secp256k1.verify(msg, signature, Buffer.from(publicKey, "hex"));
   }

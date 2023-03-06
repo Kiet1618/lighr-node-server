@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { IsNotEmpty, IsNotEmptyObject, IsObject, IsString, ValidateNested } from "class-validator";
 
-class MetadataDto {
+class EncryptedMetadataDto {
   @IsNotEmpty()
   @IsString()
   mac: string;
@@ -34,7 +34,7 @@ export class CreateStorageDto {
   @IsObject()
   @ValidateNested()
   @IsNotEmptyObject()
-  @Type(() => MetadataDto)
+  @Type(() => EncryptedMetadataDto)
   @IsNotEmpty()
-  readonly metadata: MetadataDto;
+  readonly encryptedMetadata: EncryptedMetadataDto;
 }

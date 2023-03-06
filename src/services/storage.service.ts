@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Metadata, Storage, StorageDocument } from "src/schemas";
+import { EncryptedMetadata, Storage, StorageDocument } from "src/schemas";
 
 @Injectable()
 export class StorageService {
@@ -14,11 +14,11 @@ export class StorageService {
     return this.storageModel.findOne({ owner });
   }
 
-  async createMetadata(owner: string, metadata: Metadata): Promise<Storage> {
-    return this.storageModel.create({ owner, metadata });
+  async createMetadata(owner: string, encryptedMetadata: EncryptedMetadata): Promise<Storage> {
+    return this.storageModel.create({ owner, encryptedMetadata });
   }
 
-  async updateMetadata(owner: string, metadata: Metadata) {
-    return this.storageModel.updateOne({ owner }, { metadata });
+  async updateMetadata(owner: string, encryptedMetadata: EncryptedMetadata) {
+    return this.storageModel.updateOne({ owner }, { encryptedMetadata });
   }
 }

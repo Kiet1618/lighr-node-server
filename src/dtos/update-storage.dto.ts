@@ -10,7 +10,7 @@ import {
   ValidateNested,
 } from "class-validator";
 
-class MetadataDto {
+class EncryptedMetadataDto {
   @IsString()
   @IsOptional()
   mac: string;
@@ -40,7 +40,7 @@ export class UpdateStorageDto {
   @IsObject()
   @ValidateNested()
   @IsNotEmptyObject()
-  @Type(() => MetadataDto)
+  @Type(() => EncryptedMetadataDto)
   @IsNotEmpty()
-  readonly metadata: MetadataDto;
+  readonly encryptedMetadata: EncryptedMetadataDto;
 }

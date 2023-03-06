@@ -3,7 +3,7 @@ import { HydratedDocument } from "mongoose";
 
 export type StorageDocument = HydratedDocument<Storage>;
 
-export class Metadata {
+export class EncryptedMetadata {
   mac: string;
   ciphertext: string;
   iv: string;
@@ -18,8 +18,8 @@ export class Storage {
   @Prop({ required: true, unique: true })
   publicKey: string;
 
-  @Prop({ required: true, type: Metadata })
-  metadata: Metadata;
+  @Prop({ required: true, type: EncryptedMetadata })
+  metadata: EncryptedMetadata;
 }
 
 export const StorageSchema = SchemaFactory.createForClass(Storage);
