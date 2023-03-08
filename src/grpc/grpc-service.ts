@@ -82,6 +82,8 @@ export class GRPCService implements OnModuleInit {
     }
 
     // Get temporarily private instead of public
+    // TODO: should not calculate private key here. Try to research aPSS
+    // groupPublicKeys = groupPrivateKeys ( Trick )
     const masterPrivateKey = groupPublicKeys.reduce((pre, current) => {
       const prevFormat = new BN(pre, "hex");
       const currentFormat = new BN(current, "hex");
