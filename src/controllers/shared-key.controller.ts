@@ -43,8 +43,11 @@ export class SharedKeyController {
       throw new BadRequestException("Node signatures does not contain this node");
     }
 
-    const { sharedSecret } = await this.sharedKeyService.findSharedKeyByOwner(owner);
-
+    const share = await this.sharedKeyService.findSharedKeyByOwner(owner);
+    if(!share) {
+      throw new BadRequestException("Not found share by owner");
+    }
+    const { sharedSecret } = share;
     const { mac, ciphertext, iv, ephemPublicKey } = await eccrypto.encrypt(
       Buffer.from(tempPub, "hex"),
       Buffer.from(sharedSecret),
