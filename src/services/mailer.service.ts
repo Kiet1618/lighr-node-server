@@ -21,8 +21,8 @@ export class MailerService {
         port: 587,
         secure: true,
         auth: {
-          user: 'nvkhiem2016@gmail.com',
-          pass: '',
+          user: 'dwalletlecle@gmail.com',
+          pass: 'kmkjqjdceodfonzp',
         }
       }
     );
