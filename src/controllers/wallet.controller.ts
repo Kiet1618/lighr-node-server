@@ -29,7 +29,7 @@ export class WalletController {
   }
 
   @Get(":owner")
-  @UseGuards(VerifyGuard)
+  // @UseGuards(VerifyGuard)
   async findWallet(@Param("owner") owner: string): Promise<Wallet> {
     return this.walletService.findWallet(owner);
   }
