@@ -23,7 +23,6 @@ export class WalletController {
   }
 
   @Get()
-  @UseGuards(VerifyGuard)
   async findAll(): Promise<Wallet[]> {
     return this.walletService.findAll();
   }
