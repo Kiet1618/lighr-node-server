@@ -7,6 +7,7 @@ import {
   Put,
   NotFoundException,
   BadRequestException,
+  Delete,
 } from "@nestjs/common";
 import { secp256k1 } from "src/common/secp256k1";
 import { CreateStorageDto } from "src/dtos/create-storage.dto";
@@ -55,6 +56,18 @@ export class StorageController {
     }
 
     return this.storageService.updateMetadata(updateStorage.nftId, updateStorage);
+  }
+
+  @Delete()
+  async deleteMetadata(@Body() userId: string, nftId: string): Promise<any> {
+    const existedMetadata = await this.storageService.findMetadataByNfts(nftId);
+    if (!existedMetadata) {
+      throw new BadRequestException("Metadata does not exist");
+    }
+    if (userId !== existedMetadata.userId) {
+      throw new BadRequestException("Your request denied");
+    }
+    return this.storageService.deleteMetadata(nftId);
   }
 
 }

@@ -29,4 +29,8 @@ export class StorageService {
   async updateMetadata(nftId: string, data: Storage) {
     return this.storageModel.updateOne({ nftId }, { data });
   }
+
+  async deleteMetadata(nftId: string) {
+    return this.storageModel.deleteOne({ nftId })
+  }
 }
