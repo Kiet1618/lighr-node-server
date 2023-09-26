@@ -22,7 +22,7 @@ export class RGPCController {
     private grpcService: GRPCService,
     private sharedKeyService: SharedKeyService,
     private walletService: WalletService,
-  ) {}
+  ) { }
 
   @GrpcMethod("P2PService", "initSecret")
   async initSecret(data: InitSecretRequest): Promise<InitSecretResponse> {
@@ -62,7 +62,7 @@ export class RGPCController {
 
   @GrpcMethod("P2PService", "storeWalletInfo")
   async storeWalletInfo(data: StoreWalletInfoRequest): Promise<StoreWalletInfoResponse> {
-    await this.walletService.createWallet(data.owner, data.publicKey, data.address);
+    await this.walletService.createWallet(data.owner, data.publicKey, data.address, data.addressETH);
     // await this.sharedKeyService.addWalletIdRef(data.owner, newWallet._id);
     return { status: true };
   }

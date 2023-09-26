@@ -14,10 +14,14 @@ export class Wallet {
   @Prop()
   address: string;
 
-  constructor(owner: string, publicKey: string, address: string) {
+  @Prop()
+  addressETH: string;
+
+  constructor(owner: string, publicKey: string, address: string, addressETH: string) {
     this.owner = owner;
     this.publicKey = publicKey;
     this.address = address;
+    this.addressETH = addressETH;
   }
 
 }

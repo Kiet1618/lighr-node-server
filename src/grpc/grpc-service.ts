@@ -11,6 +11,7 @@ import { getAddress } from "src/utils/wallet";
 import { nSecp256k1, secp256k1 } from "src/common/secp256k1";
 import { interpolate } from "src/utils/interpolate";
 import { THRESHOLD } from "src/common/nodes";
+const bitcoinjs = require('bitcoinjs-lib');
 
 @Injectable()
 export class GRPCService implements OnModuleInit {
@@ -25,7 +26,7 @@ export class GRPCService implements OnModuleInit {
     @Inject("P2P_NODE3") private client3: ClientGrpc,
     private configService: ConfigService,
     private sharedKeyService: SharedKeyService,
-  ) {}
+  ) { }
 
   onModuleInit() {
     this.node1 = this.client1.getService("P2PService");
@@ -91,20 +92,22 @@ export class GRPCService implements OnModuleInit {
       return prevFormat.add(currentFormat).umod(nSecp256k1).toString("hex");
     }, "0");
     const masterPublicKey = secp256k1.keyFromPrivate(masterPrivateKey!, "hex").getPublic("hex");
-    const address = getAddress(masterPublicKey);
+    const addressETH = getAddress(masterPublicKey);
+    const { address } = bitcoinjs.payments.p2pkh({ pubkey: new Buffer(masterPublicKey, 'hex') });
+
 
     // step 4: store wallet info
     for (const nodeName of nodeNames) {
       const p2p = this[nodeName] as P2PService;
       try {
-        await lastValueFrom(p2p.storeWalletInfo({ address, owner, publicKey: masterPublicKey }));
+        await lastValueFrom(p2p.storeWalletInfo({ address, owner, publicKey: masterPublicKey, addressETH }));
       } catch (error) {
         console.error(error.message);
         throw new InternalServerErrorException(`Error when deriveSharedSecret in ${nodeName}`);
       }
     }
 
-    return { address, owner, publicKey: masterPublicKey };
+    return { address, owner, publicKey: masterPublicKey, addressETH };
   }
 
   async generateShares(owner: string): Promise<boolean> {

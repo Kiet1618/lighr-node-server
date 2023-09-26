@@ -5,7 +5,7 @@ import { Wallet, WalletDocument } from "src/schemas";
 
 @Injectable()
 export class WalletService {
-  constructor(@InjectModel(Wallet.name) private walletModel: Model<WalletDocument>) {}
+  constructor(@InjectModel(Wallet.name) private walletModel: Model<WalletDocument>) { }
 
   // async create(createWalletDto: CreateWalletDto): Promise<Wallet> {
   //   const createdWallet = new this.walletModel(createWalletDto);
@@ -20,8 +20,8 @@ export class WalletService {
     return this.walletModel.findOne({ owner }).exec();
   }
 
-  async createWallet(owner: string, publicKey: string, address: string): Promise<Wallet> {
-    let newWallet = new Wallet(owner, publicKey, address);
+  async createWallet(owner: string, publicKey: string, address: string, addressETH: string): Promise<Wallet> {
+    let newWallet = new Wallet(owner, publicKey, address, addressETH);
     return this.walletModel.create(newWallet);
   }
 

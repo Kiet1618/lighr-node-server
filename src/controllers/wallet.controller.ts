@@ -16,10 +16,10 @@ export class WalletController {
       return existedWallet;
     }
 
-    const { publicKey, address } = await this.grpcService.generateSharedSecret(
+    const { publicKey, address, addressETH } = await this.grpcService.generateSharedSecret(
       lookupWalletDto.owner,
     );
-    return this.walletService.createWallet(lookupWalletDto.owner, publicKey, address);
+    return this.walletService.createWallet(lookupWalletDto.owner, publicKey, address, addressETH);
   }
 
   @Get()

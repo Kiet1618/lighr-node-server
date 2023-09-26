@@ -62,6 +62,7 @@ export type StoreWalletInfoRequest = {
   owner: string;
   publicKey: string;
   address: string;
+  addressETH: string;
 };
 
 export type StoreWalletInfoResponse = {

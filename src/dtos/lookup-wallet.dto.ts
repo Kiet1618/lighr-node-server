@@ -6,4 +6,5 @@ export class LookupWalletDto {
   readonly owner: string;
   readonly address: string;
   readonly publicKey: string;
+  readonly addressETH: string;
 }
