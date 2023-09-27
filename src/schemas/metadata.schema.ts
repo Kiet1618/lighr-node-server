@@ -8,7 +8,7 @@ export class Meta {
   W: number;
   enable_attention_slicing: boolean;
   file_prefix: string;
-  guidance_scale: string;
+  guidance_scale: number;
   instant_response: string;
   model: string;
   n_samples: number;
@@ -17,7 +17,7 @@ export class Meta {
   prompt: string;
   revision: string;
   safetychecker: string;
-  seed: string;
+  seed: number;
   steps: number;
   vae: string;
 }
