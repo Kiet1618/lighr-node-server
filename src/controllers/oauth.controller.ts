@@ -24,7 +24,6 @@ export class OauthController {
         const { tokens } = await this.oAuth2Client.getToken(code);
         const { access_token } = tokens;
         const user: User = await verifyAccessToken(`Bearer ${access_token}`);
-        console.log(user);
         const existedUser = await this.userService.findUserById(user.id);
         if (!existedUser) {
             await this.userService.createUser(user);
