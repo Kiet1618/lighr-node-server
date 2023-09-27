@@ -11,9 +11,9 @@ class MetaDto {
   @IsNotEmpty()
   W: number;
 
-  @IsBoolean()
+  @IsString()
   @IsNotEmpty()
-  enable_attention_slicing: boolean;
+  enable_attention_slicing: string;
 
   @IsString()
   @IsNotEmpty()

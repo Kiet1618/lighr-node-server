@@ -6,7 +6,7 @@ export type MetadataDocument = HydratedDocument<Metadata>;
 export class Meta {
   H: number;
   W: number;
-  enable_attention_slicing: boolean;
+  enable_attention_slicing: string;
   file_prefix: string;
   guidance_scale: number;
   instant_response: string;
