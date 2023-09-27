@@ -16,6 +16,9 @@ export class AddressService {
   async findAddressByEmail(email: string): Promise<Address> {
     return this.addressModel.findOne({ email });
   }
+  async findUserByAddress(addressETH: string): Promise<Address> {
+    return this.addressModel.findOne({ 'address.eth': addressETH }).exec();
+  }
 
   async createAddress(address: Address): Promise<Address> {
     return this.addressModel.create(address);
