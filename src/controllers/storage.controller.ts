@@ -22,10 +22,10 @@ export class StorageController {
   constructor(private readonly storageService: StorageService) { }
 
   @Get(":owner")
-  async getMetadata(@Param("owner") owner: string): Promise<Array<Storage>> {
-    const metadata = await this.storageService.findMetadataByOwner(owner);
+  async getMetadata(@Param("owner") id: string): Promise<Storage> {
+    const metadata = await this.storageService.findMetadataByNfts(id);
     if (!metadata) {
-      throw new NotFoundException(`Can not find metadata with ${owner}`);
+      throw new NotFoundException(`Can not find metadata with ${id}`);
     }
     return metadata;
   }
