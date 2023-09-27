@@ -40,11 +40,8 @@ export class StorageController {
   }
 
   @Post()
-  async createMetadata(@Body() createStorage: CreateStorageDto, @Headers('Authorization') accessToken: string): Promise<Storage> {
-    const { id: userId } = await verifyAccessToken(accessToken);
-    if (userId !== createStorage.userId) {
-      throw new BadRequestException("Your request denied");
-    }
+  async createMetadata(@Body() createStorage: CreateStorageDto): Promise<Storage> {
+
     const existedMetadata = await this.storageService.findMetadataByNfts(createStorage.nftId);
     if (existedMetadata) {
       throw new BadRequestException("Metadata already exists");
