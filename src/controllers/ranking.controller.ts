@@ -37,7 +37,7 @@ export class RankingController {
   }
 
   @Put()
-  async updateRanking(@Body() updateRanking: CreateRankingsDto, @Headers('Authorization') accessToken: string): Promise<any> {
+  async updateRanking(@Body() updateRanking: CreateRankingsDto, idUserSold: string, @Headers('Authorization') accessToken: string): Promise<any> {
     const { id: userId } = await verifyAccessToken(accessToken);
     if (!userId) {
       throw new BadRequestException("Your need login");
@@ -46,7 +46,14 @@ export class RankingController {
     if (!existedMetadata) {
       throw new BadRequestException("Ranking does not exist");
     }
-
+    const updateRankingUserSold = await this.rankingService.findRankingById(idUserSold);
+    if (!updateRankingUserSold) {
+      throw new BadRequestException("User sold does not exist");
+    }
+    await this.rankingService.updateRanking({
+      ...updateRanking,
+      numSold: updateRanking.numSold + 1
+    })
     return this.rankingService.updateRanking(updateRanking);
   }
 }
