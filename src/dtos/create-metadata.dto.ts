@@ -11,17 +11,17 @@ class MetaDto {
   @IsNotEmpty()
   W: number;
 
-  @IsBoolean()
+  @IsString()
   @IsNotEmpty()
-  enable_attention_slicing: boolean;
+  enable_attention_slicing: string;
 
   @IsString()
   @IsNotEmpty()
   file_prefix: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  guidance_scale: string;
+  guidance_scale: number;
 
   @IsString()
   @IsNotEmpty()
@@ -55,9 +55,9 @@ class MetaDto {
   @IsNotEmpty()
   safetychecker: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  seed: string;
+  seed: number;
 
   @IsNumber()
   @IsNotEmpty()

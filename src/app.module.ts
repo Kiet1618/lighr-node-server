@@ -26,7 +26,11 @@ import {
   User,
   UserSchema,
   Metadata,
-  MetadataSchema
+  MetadataSchema,
+  Address,
+  AddressSchema,
+  Ranking,
+  RankingSchema
 } from "./schemas";
 import { GRPCService } from "./grpc/grpc-service";
 
@@ -53,7 +57,9 @@ import { GRPCService } from "./grpc/grpc-service";
       { name: SharedKey.name, schema: SharedKeySchema },
       { name: Storage.name, schema: StorageSchema },
       { name: User.name, schema: UserSchema },
-      { name: Metadata.name, schema: MetadataSchema }
+      { name: Metadata.name, schema: MetadataSchema },
+      { name: Address.name, schema: AddressSchema },
+      { name: Ranking.name, schema: RankingSchema }
     ]),
     CacheModule.registerAsync<RedisClientOptions>({
       imports: [ConfigModule],
