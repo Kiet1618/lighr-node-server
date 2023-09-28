@@ -37,7 +37,7 @@ export class RankingController {
   }
 
   @Put()
-  async updateRanking(@Body() updateRanking: CreateRankingsDto, idUserSold: string, @Headers('Authorization') accessToken: string): Promise<any> {
+  async updateRanking(@Body() updateRanking: CreateRankingsDto, @Headers('Authorization') accessToken: string): Promise<any> {
     const { id: userId } = await verifyAccessToken(accessToken);
     if (!userId) {
       throw new BadRequestException("Your need login");
@@ -46,22 +46,19 @@ export class RankingController {
     if (!existedMetadata) {
       throw new BadRequestException("Ranking does not exist");
     }
-    const updateRankingUserSold = await this.rankingService.findRankingById(idUserSold);
+    const updateRankingUserSold: Ranking = await this.rankingService.findRankingById(updateRanking.idUserSold);
     if (!updateRankingUserSold) {
       throw new BadRequestException("User sold does not exist");
     }
     if (existedMetadata.numPurchased !== updateRanking.numPurchased) {
+      updateRankingUserSold.numSold = (updateRankingUserSold.numSold as number) + 1;
 
-      await this.rankingService.updateRanking({
-        ...updateRanking,
-        numSold: updateRanking.numSold + 1
-      })
+      this.rankingService.updateRanking(updateRankingUserSold)
     }
-    else if (existedMetadata.numPromptPurchased !== updateRanking.numPromptPurchased) {
-      await this.rankingService.updateRanking({
-        ...updateRanking,
-        numSold: updateRanking.numPromptSold + 1
-      })
+    else if (Number(existedMetadata.numPromptPurchased) + 1 == Number(updateRanking.numPromptPurchased)) {
+      updateRankingUserSold.numSold = (updateRankingUserSold.numPromptSold as number) + 1;
+
+      this.rankingService.updateRanking(updateRankingUserSold)
     }
     else {
       throw new BadRequestException("Ranking does not update");
