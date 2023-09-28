@@ -830,7 +830,7 @@ export async function getCurrentPromptBuyer(tokenId: string) {
     const provider = new ethers.JsonRpcProvider(
         "https://public-node.testnet.rsk.co"
     );
-    const contract = "0x4f4A0498DBE0DE64E057eFc9c0dd11C2c5Dd4958";
+    const contract = "0x848bbEA1d3CEED52296946aa44d20adc1167Dd6D";
     const mkp = new ethers.Contract(contract, ABI, provider);
     const name = await mkp.getCurrentPromptBuyer(Number(tokenId));
     return name;
@@ -840,7 +840,7 @@ export async function getCurrentPromptPrice(tokenId: string) {
     const provider = new ethers.JsonRpcProvider(
         "https://public-node.testnet.rsk.co"
     );
-    const contract = "0x4f4A0498DBE0DE64E057eFc9c0dd11C2c5Dd4958";
+    const contract = "0x848bbEA1d3CEED52296946aa44d20adc1167Dd6D";
     const mkp = new ethers.Contract(contract, ABI, provider);
     const price = await mkp.getCurrentPromptPrice(Number(tokenId));
     return Number(price);
