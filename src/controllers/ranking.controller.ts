@@ -50,10 +50,23 @@ export class RankingController {
     if (!updateRankingUserSold) {
       throw new BadRequestException("User sold does not exist");
     }
-    await this.rankingService.updateRanking({
-      ...updateRanking,
-      numSold: updateRanking.numSold + 1
-    })
+    if (existedMetadata.numPurchased !== updateRanking.numPurchased) {
+
+      await this.rankingService.updateRanking({
+        ...updateRanking,
+        numSold: updateRanking.numSold + 1
+      })
+    }
+    else if (existedMetadata.numPromptPurchased !== updateRanking.numPromptPurchased) {
+      await this.rankingService.updateRanking({
+        ...updateRanking,
+        numSold: updateRanking.numPromptSold + 1
+      })
+    }
+    else {
+      throw new BadRequestException("Ranking does not update");
+    }
+
     return this.rankingService.updateRanking(updateRanking);
   }
 }
