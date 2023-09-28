@@ -835,3 +835,12 @@ export async function getCurrentPromptBuyer(tokenId: string) {
     return name;
 }
 
+export async function getCurrentPromptPrice(tokenId: string) {
+    const provider = new ethers.JsonRpcProvider(
+        "https://public-node.testnet.rsk.co"
+    );
+    const contract = "0xff767fdFC738fC21C24bfc1c5F597dcf1EFC5fB6";
+    const mkp = new ethers.Contract(contract, ABI, provider);
+    const price = await mkp.getCurrentPromptPrice(Number(tokenId));
+    return Number(price);
+}   
