@@ -8,3 +8,4 @@ export * from "./users.service";
 export * from "./metadata.service";
 export * from "./address.service";
 export * from "./ranking.service";
+export * from "./ordinal.service";
