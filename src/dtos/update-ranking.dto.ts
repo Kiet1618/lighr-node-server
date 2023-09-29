@@ -2,24 +2,28 @@ import { Type } from "class-transformer";
 import { IsArray, IsBoolean, IsNotEmpty, IsNotEmptyObject, IsNumber, IsObject, IsString, ValidateNested } from "class-validator";
 
 
-export class CreateRankingsDto {
+export class UpdateRankingsDto {
   @IsString()
   @IsNotEmpty()
   readonly id: string;
 
   @IsNumber()
   @IsNotEmpty()
-  readonly numSold: number;
+  readonly numSold: Number;
 
   @IsNumber()
   @IsNotEmpty()
-  readonly numPurchased: number;
+  readonly numPurchased: Number;
 
   @IsNumber()
   @IsNotEmpty()
-  readonly numPromptSold: number;
+  readonly numPromptSold: Number;
 
   @IsNumber()
   @IsNotEmpty()
-  readonly numPromptPurchased: number;
+  readonly numPromptPurchased: Number;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly idUserSold: string;
 }

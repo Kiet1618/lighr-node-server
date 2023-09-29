@@ -12,7 +12,7 @@ import {
 } from "@nestjs/common";
 import { RankingService } from "src/services";
 import { Ranking } from "src/schemas";
-import { CreateRankingsDto } from "src/dtos/create-and-update-ranking.dto";
+import { UpdateRankingsDto } from "src/dtos/update-ranking.dto";
 import { verifyAccessToken } from "src/verifier/oauth.verifier";
 
 @Controller("rankings")
@@ -37,7 +37,7 @@ export class RankingController {
   }
 
   @Put()
-  async updateRanking(@Body() updateRanking: CreateRankingsDto, @Headers('Authorization') accessToken: string): Promise<any> {
+  async updateRanking(@Body() updateRanking: UpdateRankingsDto, @Headers('Authorization') accessToken: string): Promise<any> {
     const { id: userId } = await verifyAccessToken(accessToken);
     if (!userId) {
       throw new BadRequestException("Your need login");
@@ -45,6 +45,25 @@ export class RankingController {
     const existedMetadata = await this.getRankingById(updateRanking.id);
     if (!existedMetadata) {
       throw new BadRequestException("Ranking does not exist");
+    }
+    const updateRankingUserSold: Ranking = await this.rankingService.findRankingById(updateRanking.idUserSold);
+    if (!updateRankingUserSold) {
+      throw new BadRequestException("User sold does not exist");
+    }
+    if (Number(existedMetadata.numPurchased) + 1 === Number(updateRanking.numPurchased)) {
+      console.log("+ NFT  Seller");
+      updateRankingUserSold.numSold = (updateRankingUserSold.numSold as number) + 1;
+
+      this.rankingService.updateRanking(updateRankingUserSold)
+    }
+    else if (Number(existedMetadata.numPromptPurchased) + 1 === Number(updateRanking.numPromptPurchased)) {
+      updateRankingUserSold.numPromptSold = (updateRankingUserSold.numPromptSold as number) + 1;
+      console.log("+ Data  Seller");
+
+      this.rankingService.updateRanking(updateRankingUserSold)
+    }
+    else {
+      throw new BadRequestException("Ranking does not update");
     }
 
     return this.rankingService.updateRanking(updateRanking);

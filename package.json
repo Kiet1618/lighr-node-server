@@ -8,7 +8,9 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
-    "start": "nest start",
+    "start:node1": "export NODE_NAME=node1 && nest start",
+    "start:node2": "export NODE_NAME=node2 && nest start",
+    "start:node3": "export NODE_NAME=node3 && nest start",
     "start:dev:node1": "export NODE_NAME=node1 && nest start --watch",
     "start:dev:node2": "export NODE_NAME=node2 && nest start --watch",
     "start:dev:node3": "export NODE_NAME=node3 && nest start --watch",

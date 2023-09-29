@@ -822,14 +822,16 @@ const ABI = [
         "type": "function"
     }
 ]
-const ethers = require("ethers");
 
+const ethers = require("ethers");
+import * as dotenv from "dotenv";
+dotenv.config();
+const contract = process.env.CONTRACT;
 
 export async function getCurrentPromptBuyer(tokenId: string) {
     const provider = new ethers.JsonRpcProvider(
         "https://public-node.testnet.rsk.co"
     );
-    const contract = "0xff767fdFC738fC21C24bfc1c5F597dcf1EFC5fB6";
     const mkp = new ethers.Contract(contract, ABI, provider);
     const name = await mkp.getCurrentPromptBuyer(Number(tokenId));
     return name;
@@ -839,7 +841,6 @@ export async function getCurrentPromptPrice(tokenId: string) {
     const provider = new ethers.JsonRpcProvider(
         "https://public-node.testnet.rsk.co"
     );
-    const contract = "0xff767fdFC738fC21C24bfc1c5F597dcf1EFC5fB6";
     const mkp = new ethers.Contract(contract, ABI, provider);
     const price = await mkp.getCurrentPromptPrice(Number(tokenId));
     return Number(price);
