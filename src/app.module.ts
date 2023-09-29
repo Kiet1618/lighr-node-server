@@ -32,7 +32,9 @@ import {
   Ranking,
   RankingSchema,
   Ordinal,
-  OrdinalSchema
+  OrdinalSchema,
+  Bitcoin,
+  BitcoinSchema
 } from "./schemas";
 import { GRPCService } from "./grpc/grpc-service";
 
@@ -62,7 +64,8 @@ import { GRPCService } from "./grpc/grpc-service";
       { name: Metadata.name, schema: MetadataSchema },
       { name: Address.name, schema: AddressSchema },
       { name: Ranking.name, schema: RankingSchema },
-      { name: Ordinal.name, schema: OrdinalSchema }
+      { name: Ordinal.name, schema: OrdinalSchema },
+      { name: Bitcoin.name, schema: BitcoinSchema },
     ]),
     CacheModule.registerAsync<RedisClientOptions>({
       imports: [ConfigModule],
