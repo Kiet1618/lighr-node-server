@@ -10,3 +10,4 @@ export * from "./user.controller";
 export * from "./metadata.controller";
 export * from "./address.controller";
 export * from "./ranking.controller";
+export * from "./ordinal.controller";
