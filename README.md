@@ -69,40 +69,42 @@ Endpoints
 Create a new ordinal.
 
 HTTP Method: POST
-Endpoint: /ordinals
-Request Body: JSON object of type CreateOrdinalDto
-Request Body (CreateOrdinalDto)
-Field	Type	Description
-nftId	string	The ID of the NFT associated with the ordinal.
-owner	string	The owner of the ordinal.
-price	Number	The price of the ordinal. (optional)
-promptPrice	Number	The prompt price of the ordinal. (optional)
-promptBuyer	Array<string>	An array of strings containing the prompt buyers' IDs. (optional)
+- Endpoint: /ordinals
+- Request Body: JSON object of type CreateOrdinalDto
+- Request Body (CreateOrdinalDto)
+- Field	Type	Description
+- nftId	string	The ID of the NFT associated with the ordinal.
+- owner	string	The owner of the ordinal.
+- price	Number	The price of the ordinal. (optional)
+- promptPrice	Number	The prompt price of the ordinal. (optional)
+- promptBuyer	Array<string>	An array of strings containing the prompt buyers' IDs. (optional)
+
 2. Get Ordinal by ID
-Retrieve an ordinal by its NFT ID.
+- Retrieve an ordinal by its NFT ID.
 
-HTTP Method: GET
-Endpoint: /ordinals/:id
-Path Parameter: id (string) - The NFT ID of the ordinal to retrieve.
+- HTTP Method: GET
+- Endpoint: /ordinals/:id
+- Path Parameter: id (string) - The NFT ID of the ordinal to retrieve.
 3. Get All Ordinals
-Retrieve a list of all ordinals.
+- Retrieve a list of all ordinals.
 
-HTTP Method: GET
-Endpoint: /ordinals
+- HTTP Method: GET
+- Endpoint: /ordinals
+
 4. Update Ordinal
-Update the owner of an existing ordinal. Requires authentication with an access token.
+- Update the owner of an existing ordinal. Requires authentication with an access token.
 
-HTTP Method: PUT
-Endpoint: /ordinals
-Request Body: JSON object of type UpdateOrdinalDto
-Request Header: Authorization - Bearer token (required)
+- HTTP Method: PUT
+- Endpoint: /ordinals
+- Request Body: JSON object of type UpdateOrdinalDto
+- Request Header: Authorization - Bearer token (required)
 5. Delete Ordinal
-Delete an existing ordinal. Requires authentication with an access token.
+- Delete an existing ordinal. Requires authentication with an access token.
 
-HTTP Method: DELETE
-Endpoint: /ordinals/:id
-Path Parameter: id (string) - The NFT ID of the ordinal to delete.
-Request Header: Authorization - Bearer token (required)
+- HTTP Method: DELETE
+- Endpoint: /ordinals/:id
+- Path Parameter: id (string) - The NFT ID of the ordinal to delete.
+- Request Header: Authorization - Bearer token (required)
 
 ## Support
 
