@@ -18,8 +18,15 @@ export class BridgeService {
     return this.bridgeModel.find();
   }
 
-  async findById(id: string): Promise<Bridge> {
-    return this.bridgeModel.findOne({ id });
+  async findByNftId(nftId: string): Promise<Bridge> {
+    return this.bridgeModel.findOne({ nftId: nftId });
+  }
+  async findByOrdId(ordId: string): Promise<Bridge> {
+    return this.bridgeModel.findOne({ ordId: ordId });
+  }
+
+  async deleteBridge(nftId: string): Promise<Bridge> {
+    return this.bridgeModel.findOneAndDelete({ nftId: nftId });
   }
 
 }

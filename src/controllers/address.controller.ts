@@ -36,9 +36,13 @@ export class AddressController {
     if (!infoById) {
       const infoByEmail = await this.addressService.findAddressByEmail(id);
       if (!infoByEmail) {
-        const infoByAddress = await this.addressService.findUserByAddress(id);
+        const infoByAddress = (await this.addressService.findUserByAddress(id));
         if (!infoByAddress) {
-          throw new NotFoundException(`Can not find address with ${id}`);
+          const infoByAddressBTC = (await this.addressService.findUserByAddressBTC(id));
+          if (!infoByAddressBTC) {
+            throw new NotFoundException(`Can not find address with ${id}`);
+          }
+          return infoByAddressBTC;
         }
         return infoByAddress;
       }
