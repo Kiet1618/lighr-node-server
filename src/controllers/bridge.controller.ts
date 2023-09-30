@@ -9,12 +9,12 @@ import {
   BadRequestException,
 } from "@nestjs/common";
 import { CreateBridgeDto } from "src/dtos/create-bridge.dto";
-import { BridgeService } from "src/services";
+import { BridgeService, OrdinalService } from "src/services";
 import { Bridge } from "src/schemas";
 
 @Controller("bridges")
 export class BridgeController {
-  constructor(private readonly bridgeService: BridgeService) { }
+  constructor(private readonly bridgeService: BridgeService, private readonly ordinalService: OrdinalService) { }
 
   @Get(":id")
   async getUserById(@Param("id") id: string): Promise<Bridge> {
@@ -48,7 +48,7 @@ export class BridgeController {
     if (existedBridgeOrdId) {
       throw new BadRequestException("Metadata already exists");
     }
-
+    await this.ordinalService.deleteOrdinal(createBridge.ordId);
     return this.bridgeService.createBridge(createBridge);
   }
 
