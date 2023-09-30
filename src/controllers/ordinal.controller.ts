@@ -56,7 +56,7 @@ export class OrdinalController {
       throw new BadRequestException("Your need login");
     }
     const addressOwner = (await this.addressService.findAddressById(userId)).address.btc;
-    if (addressOwner !== updateOrdinal.owner) {
+    if (addressOwner !== userId) {
       throw new BadRequestException("Owner not match");
     }
 
@@ -65,7 +65,7 @@ export class OrdinalController {
     if (!existedOrdinal) {
       throw new BadRequestException("Ordinal does not exist");
     }
-    return this.ordinalService.updateOrdinal(updateOrdinal.nftId, updateOrdinal.newOwner);
+    return this.ordinalService.updateOrdinal(updateOrdinal.nftId, updateOrdinal.owner);
   }
 
   @Delete(":id")
