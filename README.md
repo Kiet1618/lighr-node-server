@@ -68,7 +68,7 @@ Endpoints
 1. Create Ordinal
 Create a new ordinal.
 
-HTTP Method: POST
+- HTTP Method: POST
 - Endpoint: /ordinals
 - Request Body: JSON object of type CreateOrdinalDto
 - Request Body (CreateOrdinalDto)
