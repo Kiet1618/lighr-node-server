@@ -6,15 +6,17 @@ import {
   Body,
   Put,
   NotFoundException,
+  Headers,
   BadRequestException,
 } from "@nestjs/common";
 import { CreateBridgeDto } from "src/dtos/create-bridge.dto";
-import { BridgeService, OrdinalService } from "src/services";
+import { BridgeService, OrdinalService, AddressService } from "src/services";
 import { Bridge } from "src/schemas";
+import { verifyAccessToken } from "src/verifier/oauth.verifier";
 
 @Controller("bridges")
 export class BridgeController {
-  constructor(private readonly bridgeService: BridgeService, private readonly ordinalService: OrdinalService) { }
+  constructor(private readonly bridgeService: BridgeService, private readonly ordinalService: OrdinalService, private readonly addressService: AddressService) { }
 
   @Get(":id")
   async getUserById(@Param("id") id: string): Promise<Bridge> {
@@ -39,7 +41,14 @@ export class BridgeController {
   }
 
   @Post()
-  async createMetadata(@Body() createBridge: CreateBridgeDto): Promise<Bridge> {
+  async createMetadata(@Body() createBridge: CreateBridgeDto, @Headers('Authorization') accessToken: string): Promise<Bridge> {
+    const { id: userId } = await verifyAccessToken(accessToken);
+    const userOwner = (await this.ordinalService.findOrdinalByNftId(createBridge.ordId)).owner;
+    const idUserOwner = (await this.addressService.findUserByAddressBTC(userOwner)).id;
+    if (userId !== idUserOwner) {
+      throw new BadRequestException("Your are not owner");
+    }
+
     const existedBridgeNftId = await this.bridgeService.findByNftId(createBridge.nftId);
     if (existedBridgeNftId) {
       throw new BadRequestException("Metadata already exists");
