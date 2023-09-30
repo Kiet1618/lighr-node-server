@@ -8,4 +8,8 @@ export class UpdateOrdinalDto {
     @IsString()
     @IsNotEmpty()
     readonly owner: string;
+
+    @IsString()
+    @IsNotEmpty()
+    readonly newOwner: string;
 }

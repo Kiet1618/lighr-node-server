@@ -65,7 +65,7 @@ export class OrdinalController {
     if (!existedOrdinal) {
       throw new BadRequestException("Ordinal does not exist");
     }
-    return this.ordinalService.updateOrdinal(updateOrdinal.nftId, updateOrdinal.owner);
+    return this.ordinalService.updateOrdinal(updateOrdinal.nftId, updateOrdinal.newOwner);
   }
 
   @Delete(":id")

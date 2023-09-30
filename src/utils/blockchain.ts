@@ -933,6 +933,8 @@ export async function getOwnerOfNft(tokenId: string) {
     const provider = new ethers.JsonRpcProvider(
         "https://public-node.testnet.rsk.co"
     );
+    const contract = process.env.CONTRACT;
+
     const mkp = new ethers.Contract(contract, ABI, provider);
     const owner = await mkp.getNFTById(Number(tokenId))[1];
     return owner;
