@@ -11,7 +11,7 @@ import {
   Delete,
 } from "@nestjs/common";
 import { CreateBridgeDto } from "src/dtos/create-bridge.dto";
-import { BridgeService, OrdinalService, AddressService, MetadataService } from "src/services";
+import { BridgeService, OrdinalService, AddressService, MetadataService, StorageService } from "src/services";
 import { Bridge } from "src/schemas";
 import { verifyAccessToken } from "src/verifier/oauth.verifier";
 import { getOwnerOfNft } from "src/utils/blockchain";
@@ -21,7 +21,8 @@ export class BridgeController {
     private readonly bridgeService: BridgeService,
     private readonly ordinalService: OrdinalService,
     private readonly addressService: AddressService,
-    private readonly metadataService: MetadataService
+    private readonly metadataService: MetadataService,
+    private readonly storageService: StorageService,
   ) { }
 
   @Get(":id")
@@ -63,8 +64,15 @@ export class BridgeController {
     if (existedBridgeOrdId) {
       throw new BadRequestException("Metadata already exists");
     }
-    await this.metadataService.updateMetadata(createBridge.ordId, createBridge.nftId);
-    await this.ordinalService.deleteOrdinal(createBridge.ordId);
+    await this.metadataService.updateMetadata(createBridge.ordId, createBridge.nftId).catch(e => {
+      throw new BadRequestException("Error", e);
+    })
+    await this.storageService.updateNewId(createBridge.ordId, createBridge.nftId).catch(e => {
+      throw new BadRequestException("Error", e);
+    })
+    await this.ordinalService.deleteOrdinal(createBridge.ordId).catch(e => {
+      throw new BadRequestException("Error", e);
+    });;
     return this.bridgeService.createBridge(createBridge);
   }
 
@@ -81,14 +89,22 @@ export class BridgeController {
     if (existedOrdinal) {
       throw new BadRequestException("Ordinal already exists");
     }
-    await this.metadataService.updateMetadata(ordId, nftId);
+    await this.metadataService.updateMetadata(nftId, ordId).catch(e => {
+      throw new BadRequestException("Error", e);
+    });
+    await this.storageService.updateNewId(nftId, ordId).catch(e => {
+      throw new BadRequestException("Error", e);
+    });
+
     await this.ordinalService.createOrdinal({
       nftId: ordId,
       owner: userOwner.address.btc,
       price: 0,
       promptPrice: 0,
       promptBuyer: [userOwner.address.btc],
-    })
+    }).catch(e => {
+      throw new BadRequestException("Error", e);
+    });
     return this.bridgeService.deleteBridge(nftId);
   }
 }
