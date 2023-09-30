@@ -20,7 +20,7 @@ export class BridgeController {
   async getUserById(@Param("id") id: string): Promise<Bridge> {
     const info = await this.bridgeService.findById(id);
     if (!info) {
-      throw new NotFoundException(`Can not find metadata with ${owner}`);
+      throw new NotFoundException(`Can not find metadata with ${id}`);
     }
     return info;
   }
