@@ -82,7 +82,6 @@ export class BridgeController {
       throw new BadRequestException("Ordinal already exists");
     }
     await this.metadataService.updateMetadata(ordId, nftId);
-    const addressBtc = (await this.addressService.findAddressById(userId)).address.btc;
     await this.ordinalService.createOrdinal({
       nftId: ordId,
       owner: userOwner.address.btc,
